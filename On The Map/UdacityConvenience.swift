@@ -26,15 +26,43 @@ extension UdacityClient {
         
         let jsonBody = "{\"udacity\": {\"username\": \"\(email)\", \"password\": \"\(password)\"}}"
      
-        taskForPOSTMethod(Methods.GetSession, jsonBody: jsonBody) { (result, error) in
+        taskForPOSTMethod(Methods.GetSession, jsonBody: jsonBody) { (result, error, errorString) in
             
             if let error = error {
                 print("error: \(error)")
-                completionHandlerForSession(success: false, errorString: "GetUdacitySession Failed")
+                completionHandlerForSession(success: false, errorString: errorString)
             } else {
-                print(result)
+                print("getSessionIdWith Result: \(result)")
+                if let result = result as? [String: AnyObject] {
+                    if let account = result[JSONResponseKeys.Account] as? [String: AnyObject]{
+                        UdacityClient.sharedInstance().currentUser = UdacityUser()
+                        UdacityClient.sharedInstance().currentUser?.uniqueKey = account[JSONResponseKeys.UniqueKey] as? String
+                    }
+                }
                 completionHandlerForSession(success: true, errorString: nil)
             }
         }
+    }
+    
+    func getUserData(userKey: String, completionHandlerForUserData: (success: Bool, user: UdacityUser?, errorString: String?) -> Void) {
+        
+        taskForGETMethod(Utility.sharedInstance().subtituteKeyInMethod(Methods.User, key: URLKeys.UserId , value: userKey)! ) { (result, error, errorString) in
+            
+            if let error = error {
+                print("error: \(error)")
+                completionHandlerForUserData(success: false, user: nil, errorString: "getUserData Failed")
+            } else {
+                print("getUserData Result: \(result)")
+                if let result = result as? [String: AnyObject], let user = result[JSONResponseKeys.User] as? [String: AnyObject] {
+                    
+                    completionHandlerForUserData(success: true, user: UdacityUser(dictionary: user), errorString: nil)
+                } else {
+                    completionHandlerForUserData(success: false, user: nil, errorString: "getUerData Failed")
+                }
+            }
+
+            
+        }
+        
     }
 }

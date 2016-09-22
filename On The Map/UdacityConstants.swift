@@ -20,6 +20,8 @@ extension UdacityClient {
         static let ApiScheme = "https"
         static let ApiHost = "www.udacity.com"
         static let ApiPath = "/api"
+        
+        static let UdacitySignUpLink = "https://www.udacity.com/account/auth#!/signup"
 
     }
     
@@ -27,6 +29,23 @@ extension UdacityClient {
         
         static let GetSession = "/session"
         static let User = "/users/{user_id}"
+        
+    }
+    
+    struct URLKeys {
+        static let UserId = "user_id"
+    }
+    
+    struct JSONResponseKeys {
+
+        static let Account = "account"
+        static let User = "user"
+        
+        // MARK: Udacity User
+        static let UniqueKey = "key"
+        static let FirstName = "first_name"
+        static let LastName = "last_name"
+        
         
     }
 }

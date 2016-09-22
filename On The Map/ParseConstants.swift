@@ -24,6 +24,7 @@ extension ParseClient {
     struct ParameterKeys {
         
         static let QueryLimit = "limit"
+        static let Where = "where"
         
     }
     

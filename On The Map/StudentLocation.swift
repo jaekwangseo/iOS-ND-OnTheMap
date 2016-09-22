@@ -10,15 +10,30 @@ import Foundation
 
 struct StudentLocation {
     
-    let objectId: String?
+    var objectId: String?
     let uniqueKey: String?
     let firstName: String?
     let lastName: String?
     let mapString: String?
     let mediaURL: String?
-    let latitude: Float?
-    let longitude: Float?
-
+    let latitude: Double?
+    let longitude: Double?
+    
+    
+    init(uniqueKey: String, firstName: String, lastName: String, mapString: String, mediaURL: String, latitude: Double, longitude: Double) {
+        
+        self.uniqueKey = uniqueKey
+        self.firstName = firstName
+        self.lastName = lastName
+        self.mapString = mapString
+        self.mediaURL = mediaURL
+        self.latitude = latitude
+        self.longitude = longitude
+        self.objectId = nil
+        
+        
+    }
+    
     
     init(dictionary: [String:AnyObject]) {
         
@@ -52,12 +67,12 @@ struct StudentLocation {
         } else {
             self.mediaURL = nil
         }
-        if let latitude = dictionary[ParseClient.JSONResponseKeys.Latitude] as? Float {
+        if let latitude = dictionary[ParseClient.JSONResponseKeys.Latitude] as? Double {
             self.latitude = latitude
         } else {
             self.latitude = nil
         }
-        if let longitude = dictionary[ParseClient.JSONResponseKeys.Longitude] as? Float {
+        if let longitude = dictionary[ParseClient.JSONResponseKeys.Longitude] as? Double {
             self.longitude = longitude
         } else {
             self.longitude = nil
@@ -65,7 +80,7 @@ struct StudentLocation {
         
     }
     
-    static func studentLocationsFromResults(results: [[String:AnyObject]]) -> [StudentLocation] {
+    static func studentLocationsFromResults(results: [[String:AnyObject]]) -> [StudentLocation]? {
         
         var studentLocations = [StudentLocation]()
         
@@ -74,7 +89,11 @@ struct StudentLocation {
             studentLocations.append(StudentLocation(dictionary: result))
         }
         
-        return studentLocations
+        if studentLocations.isEmpty {
+            return nil
+        } else {
+            return studentLocations
+        }
     }
 
     

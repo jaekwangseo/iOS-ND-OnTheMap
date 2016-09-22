@@ -14,25 +14,28 @@ class TableViewController: UIViewController {
     
     @IBOutlet weak var studentLocationTableView: UITableView!
     
-    var studentLocations: [StudentLocation] = [StudentLocation]()
+    var studentLocations: [StudentLocation] = []
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ParseClient.sharedInstance().getStudentLocations(100, completionHandlerForStudentLocations: { (studentLocations, error) in
-            
-            if let studentLocations = studentLocations {
-                self.studentLocations = studentLocations
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.studentLocationTableView.reloadData()
-                })
-            } else {
-                print(error)
-            }
-            
+        
+        if let mapViewController = self.tabBarController?.viewControllers?[0] as? MapViewController {
+            studentLocations = mapViewController.studentLocations
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.studentLocationTableView.reloadData()
         })
 
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        parentViewController!.navigationItem.leftBarButtonItem?.enabled = true
+    }
+    
+
     
 }
 
@@ -64,10 +67,21 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let controller = storyboard!.instantiateViewControllerWithIdentifier("MovieDetailViewController") as! MovieDetailViewController
-        controller.movie = movies[indexPath.row]
-        navigationController!.pushViewController(controller, animated: true)
+        
+        let studentLocation = studentLocations[indexPath.row]
+        
+        if let url = studentLocation.mediaURL {
+            print(url)
+            let url = NSURL(string: url)
+            let request = NSURLRequest(URL: url!)
+            let webViewController = self.storyboard!.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
+            webViewController.urlRequest = request
+            webViewController.title = ""
+            
+            let webNavigationController = UINavigationController()
+            webNavigationController.pushViewController(webViewController, animated: false)
+            
+            self.presentViewController(webNavigationController, animated: true, completion: nil)
+        }
     }
-
-    
 }

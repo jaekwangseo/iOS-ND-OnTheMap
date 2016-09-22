@@ -3,12 +3,54 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "MapViewController.(addMyLocation() -&gt; ()).(closure #1):MapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "result == nil">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ParseClient.newStudentLocation(StudentLocation, completionHandlerForStudentLocation : (objectId : String?, error : NSError?) -&gt; ()) -&gt; ():ParseConvenience.swift">
+      </ContextState>
+      <ContextState
+         contextName = "UdacityClient.(getUserData(String, completionHandlerForUserData : (success : [[String : AnyObject]]?, errorString : String?) -&gt; ()) -&gt; ()).(closure #1):UdacityConvenience.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "user.firstName">
+            </PersistentString>
+            <PersistentString
+               value = "UdacityClient.sharedInstance().userFirstName">
+            </PersistentString>
+            <PersistentString
+               value = "udacityUser.firstName">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "MapViewController.addMyLocation() -&gt; ():MapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UdacityClient.sharedInstance().currentUser?.uniqueKey">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "UdacityClient.(getSessionIdWith(String, password : String, completionHandlerForSession : (success : Bool, errorString : String?) -&gt; ()) -&gt; ()).(closure #1):UdacityConvenience.swift">
          <PersistentStrings>
             <PersistentString
                value = "result.dataUsingEncoding(NSUTF8StringEncoding)`">
             </PersistentString>
+            <PersistentString
+               value = "UdacityClient.sharedInstance().userKey">
+            </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "InformationPostingViewController.(findOnTheMap(UIButton) -&gt; ()).(closure #1):InformationPostingViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "MapViewController.(loadStudentLocations() -&gt; ()).(closure #1):MapViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>
