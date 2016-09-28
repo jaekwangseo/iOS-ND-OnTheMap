@@ -68,6 +68,9 @@
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
+                            <activityIndicatorView opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="NHu-Nw-HAe">
+                                <rect key="frame" x="291" y="241" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="0.80428340517241381" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -77,7 +80,9 @@
                             <constraint firstItem="qr1-Ts-6sm" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="BHi-TS-Nkg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="t7i-jM-yzl" secondAttribute="trailing" id="BOZ-hJ-jsX"/>
                             <constraint firstAttribute="leadingMargin" secondItem="PnK-Uv-b9H" secondAttribute="leading" id="BcO-yS-UY6"/>
+                            <constraint firstItem="NHu-Nw-HAe" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="CZJ-TE-MjK"/>
                             <constraint firstAttribute="leadingMargin" secondItem="qr1-Ts-6sm" secondAttribute="leading" id="DRf-Yv-uL6"/>
+                            <constraint firstItem="NHu-Nw-HAe" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="IhJ-eX-W9E"/>
                             <constraint firstItem="qr1-Ts-6sm" firstAttribute="top" secondItem="PnK-Uv-b9H" secondAttribute="bottom" constant="8" symbolic="YES" id="Jj7-4k-2Pn"/>
                             <constraint firstItem="iK1-Lp-2Rw" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="N9f-eM-Ec4"/>
                             <constraint firstItem="Hzy-wV-jAo" firstAttribute="top" secondItem="qr1-Ts-6sm" secondAttribute="bottom" constant="8" symbolic="YES" id="NRs-6q-F12"/>
@@ -100,6 +105,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="NHu-Nw-HAe" id="Ka3-pG-SZL"/>
                         <outlet property="emailTextField" destination="PnK-Uv-b9H" id="9rz-6c-Olk"/>
                         <outlet property="passwordTextField" destination="qr1-Ts-6sm" id="1JX-KF-vOb"/>
                     </connections>
@@ -126,16 +132,21 @@
                                     <outlet property="delegate" destination="wy9-Dh-pVO" id="pzv-M4-m9Q"/>
                                 </connections>
                             </mapView>
+                            <activityIndicatorView opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Tc5-dz-3aL">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="ptm-5a-zOr" firstAttribute="top" secondItem="6mY-gf-MV5" secondAttribute="bottom" id="Fgn-r9-Lcd"/>
                             <constraint firstItem="6mY-gf-MV5" firstAttribute="leading" secondItem="tDx-wI-wcU" secondAttribute="leadingMargin" constant="-16" id="GL9-8c-wMH"/>
                             <constraint firstItem="6mY-gf-MV5" firstAttribute="leading" secondItem="tDx-wI-wcU" secondAttribute="leadingMargin" constant="-20" id="HaO-a5-ile"/>
+                            <constraint firstItem="Tc5-dz-3aL" firstAttribute="centerX" secondItem="tDx-wI-wcU" secondAttribute="centerX" id="JIy-GQ-uGE"/>
                             <constraint firstItem="ptm-5a-zOr" firstAttribute="top" secondItem="6mY-gf-MV5" secondAttribute="bottom" id="La5-4b-X1l"/>
                             <constraint firstItem="ptm-5a-zOr" firstAttribute="top" secondItem="6mY-gf-MV5" secondAttribute="bottom" constant="8" symbolic="YES" id="M6R-5O-wYg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6mY-gf-MV5" secondAttribute="trailing" constant="-20" id="Rj4-RS-xyu"/>
                             <constraint firstItem="6mY-gf-MV5" firstAttribute="top" secondItem="tDx-wI-wcU" secondAttribute="topMargin" id="eQv-zP-tVT"/>
+                            <constraint firstItem="Tc5-dz-3aL" firstAttribute="centerY" secondItem="tDx-wI-wcU" secondAttribute="centerY" id="gsI-Tc-gqb"/>
                             <constraint firstItem="6mY-gf-MV5" firstAttribute="bottom" secondItem="nhj-TI-Hbd" secondAttribute="bottom" id="gy5-nt-TU0"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6mY-gf-MV5" secondAttribute="trailing" constant="-16" id="ico-IR-Ve3"/>
                             <constraint firstItem="6mY-gf-MV5" firstAttribute="top" secondItem="nhj-TI-Hbd" secondAttribute="bottom" constant="-44" id="sso-Ks-rq4"/>
@@ -153,6 +164,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map" id="Wo7-xQ-yca"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="Tc5-dz-3aL" id="679-dS-Oj6"/>
                         <outlet property="mapView" destination="6mY-gf-MV5" id="iIY-F0-2Ns"/>
                     </connections>
                 </viewController>
@@ -233,13 +245,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7eS-IS-IE9">
-                                <rect key="frame" x="532" y="28" width="48" height="30"/>
-                                <state key="normal" title="Cancel"/>
-                                <connections>
-                                    <action selector="cancel:" destination="WYE-Wf-qYa" eventType="touchUpInside" id="skc-JL-MW7"/>
-                                </connections>
-                            </button>
                             <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="770" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dBu-80-DeQ" userLabel="Link">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="201"/>
                                 <color key="backgroundColor" red="0.25490196079999999" green="0.45882352939999999" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -252,7 +257,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where are you studying today?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ndw-gR-AUT">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Where are you studying today?" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ndw-gR-AUT">
                                 <rect key="frame" x="119.5" y="47" width="361.5" height="41"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="textColor" red="0.25490196078431371" green="0.45882352941176469" blue="0.64313725490196072" alpha="1" colorSpace="calibratedRGB"/>
@@ -266,7 +271,7 @@
                                     <action selector="findOnTheMap:" destination="WYE-Wf-qYa" eventType="touchUpInside" id="Gdy-Lx-X0k"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="760" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dCJ-nO-KPk">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="760" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dCJ-nO-KPk">
                                 <rect key="frame" x="0.0" y="135" width="600" height="329"/>
                                 <color key="backgroundColor" red="0.25490196078431371" green="0.45882352941176469" blue="0.64313725490196072" alpha="1" colorSpace="calibratedRGB"/>
                                 <edgeInsets key="layoutMargins" top="100" left="100" bottom="100" right="100"/>
@@ -285,12 +290,31 @@
                                     <action selector="submit:" destination="WYE-Wf-qYa" eventType="touchUpInside" id="pIS-6n-3vi"/>
                                 </connections>
                             </button>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7eS-IS-IE9">
+                                <rect key="frame" x="532" y="28" width="48" height="30"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <size key="titleShadowOffset" width="2.2250738585072014e-308" height="2.2250738585072014e-308"/>
+                                <state key="normal" title="Cancel">
+                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleShadowColor" red="0.25490196079999999" green="0.45882352939999999" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="cancel:" destination="WYE-Wf-qYa" eventType="touchUpInside" id="skc-JL-MW7"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Z7k-25-QDk">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.85098039215686272" green="0.85098039215686272" blue="0.83529411764705885" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="dCJ-nO-KPk" firstAttribute="top" secondItem="Ndw-gR-AUT" secondAttribute="bottom" constant="47" id="1Dn-QC-kXF"/>
                             <constraint firstItem="Ndw-gR-AUT" firstAttribute="centerX" secondItem="nDo-k9-ogo" secondAttribute="centerX" id="6Fq-Pi-kdF"/>
                             <constraint firstItem="duH-eN-Ifz" firstAttribute="top" secondItem="DKX-ZQ-N9e" secondAttribute="bottom" id="6Yq-nq-18Y"/>
+                            <constraint firstItem="Z7k-25-QDk" firstAttribute="centerX" secondItem="nDo-k9-ogo" secondAttribute="centerX" id="7aU-SY-OOO"/>
                             <constraint firstItem="dCJ-nO-KPk" firstAttribute="top" secondItem="WN4-NQ-v5f" secondAttribute="bottom" constant="115" id="AJX-K4-dNb"/>
                             <constraint firstItem="dCJ-nO-KPk" firstAttribute="top" secondItem="WN4-NQ-v5f" secondAttribute="bottom" constant="115" id="ALX-GT-THB"/>
                             <constraint firstItem="dCJ-nO-KPk" firstAttribute="centerY" secondItem="nDo-k9-ogo" secondAttribute="centerY" id="CGJ-ZF-HNq"/>
@@ -299,6 +323,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="DKX-ZQ-N9e" secondAttribute="trailing" constant="-20" id="E4M-uq-R5O"/>
                             <constraint firstItem="dCJ-nO-KPk" firstAttribute="centerX" secondItem="nDo-k9-ogo" secondAttribute="centerX" id="GLk-hi-e5Q"/>
                             <constraint firstItem="duH-eN-Ifz" firstAttribute="top" secondItem="dCJ-nO-KPk" secondAttribute="bottom" constant="136" id="Glx-Qv-zMu"/>
+                            <constraint firstItem="Z7k-25-QDk" firstAttribute="centerY" secondItem="nDo-k9-ogo" secondAttribute="centerY" id="H3b-BQ-QqK"/>
                             <constraint firstItem="SXx-HQ-uHK" firstAttribute="top" secondItem="dCJ-nO-KPk" secondAttribute="bottom" constant="60" id="MC4-9k-hSF"/>
                             <constraint firstItem="EIc-SS-Y6N" firstAttribute="centerX" secondItem="nDo-k9-ogo" secondAttribute="centerX" id="NEi-5m-c3e"/>
                             <constraint firstItem="DKX-ZQ-N9e" firstAttribute="top" secondItem="dBu-80-DeQ" secondAttribute="bottom" id="OjM-vt-auD"/>
@@ -320,18 +345,19 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="a2x-ew-ThE"/>
+                                <exclude reference="hgh-Qb-jE8"/>
                                 <exclude reference="AJX-K4-dNb"/>
                                 <exclude reference="ALX-GT-THB"/>
                                 <exclude reference="CGJ-ZF-HNq"/>
                                 <exclude reference="GLk-hi-e5Q"/>
-                                <exclude reference="a2x-ew-ThE"/>
-                                <exclude reference="hgh-Qb-jE8"/>
                                 <exclude reference="PaG-Ez-Hjl"/>
                                 <exclude reference="Glx-Qv-zMu"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="Z7k-25-QDk" id="FWD-Py-BDD"/>
                         <outlet property="cancelButton" destination="7eS-IS-IE9" id="HI6-Pi-eX9"/>
                         <outlet property="findOnTheMapButton" destination="SXx-HQ-uHK" id="7sZ-fP-T31"/>
                         <outlet property="geocode" destination="dCJ-nO-KPk" id="i49-Xz-Asc"/>
@@ -379,6 +405,10 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="RQl-wE-KS1" userLabel="Student Location Table View">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <activityIndicatorView key="tableFooterView" opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="H69-do-f4D">
+                                    <rect key="frame" x="0.0" y="109" width="600" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </activityIndicatorView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StudentLocationTableViewCell" id="tyw-r8-6XR">
                                         <rect key="frame" x="0.0" y="65" width="600" height="44"/>
@@ -412,6 +442,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="List" image="list" id="XER-yj-bf3"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="H69-do-f4D" id="JNr-vA-oMg"/>
                         <outlet property="studentLocationTableView" destination="RQl-wE-KS1" id="L1k-eQ-ygz"/>
                     </connections>
                 </viewController>

@@ -10,6 +10,8 @@ import Foundation
 
 class ParseClient: NSObject {
     
+    var studentLocation: StudentLocation?
+    
     // MARK: GET
     func taskForGETMethod(method: String, parameters: [String:AnyObject], completionHandlerForGET: (result: AnyObject!, error: NSError?, errorString: String?) -> Void) -> NSURLSessionDataTask {
         
@@ -103,6 +105,57 @@ class ParseClient: NSObject {
             print(NSString(data: data, encoding: NSUTF8StringEncoding))
             
             self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForPOST)
+        }
+        
+        /* 7. Start the request */
+        task.resume()
+        
+        return task
+    }
+    
+    
+    func taskForPUTMethod(method: String, jsonBody: String, completionHandlerForPUT: (result: AnyObject!, error: NSError?, errorString: String?) -> Void) -> NSURLSessionDataTask {
+        
+        
+        let request = NSMutableURLRequest(URL: buildURL([String : AnyObject](), withPathExtension: method))
+        request.HTTPMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue(Constants.ParseApplicationId, forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue(Constants.ParseRestAPIKey, forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.HTTPBody = jsonBody.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let session = NSURLSession.sharedSession()
+        
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            func sendError(error: String) {
+                print(error)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForPUT(result: nil, error: NSError(domain: "taskForPOSTMethod", code: 1, userInfo: userInfo), errorString: error)
+            }
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                sendError("There was an error with your request: \(error)")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                sendError("Your request returned status code of \((response as? NSHTTPURLResponse)?.statusCode)")
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                sendError("No data was returned by the request!")
+                return
+            }
+            
+            print(NSString(data: data, encoding: NSUTF8StringEncoding))
+            
+            self.convertDataWithCompletionHandler(data, completionHandlerForConvertData: completionHandlerForPUT)
         }
         
         /* 7. Start the request */

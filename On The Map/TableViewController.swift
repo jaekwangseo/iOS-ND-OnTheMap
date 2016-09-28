@@ -11,6 +11,7 @@ import UIKit
 
 class TableViewController: UIViewController {
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var studentLocationTableView: UITableView!
     
@@ -70,18 +71,34 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
         
         let studentLocation = studentLocations[indexPath.row]
         
-        if let url = studentLocation.mediaURL {
-            print(url)
-            let url = NSURL(string: url)
-            let request = NSURLRequest(URL: url!)
-            let webViewController = self.storyboard!.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
-            webViewController.urlRequest = request
-            webViewController.title = ""
+        if let urlString = studentLocation.mediaURL {
+            print(urlString)
+            let app = UIApplication.sharedApplication()
+            guard let url = NSURL(string: urlString) else {
+                displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(urlString)")
+                return
+            }
             
-            let webNavigationController = UINavigationController()
-            webNavigationController.pushViewController(webViewController, animated: false)
-            
-            self.presentViewController(webNavigationController, animated: true, completion: nil)
+            let result = app.openURL(url)
+            if !result {
+                displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(urlString)")
+            }
+
         }
     }
+    
+    func displayAlert(title: String?, message: String?) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: .Default ) { (action) in
+            
+        }
+        
+        alertController.addAction(okAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+
 }

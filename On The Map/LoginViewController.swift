@@ -12,6 +12,7 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     @IBAction func signUp(sender: UIButton) {
         
@@ -41,7 +42,9 @@ class LoginViewController: UIViewController {
             return
         }
         
-        //
+        activityIndicator.alpha = 1.0
+        activityIndicator.startAnimating()
+        
         UdacityClient.sharedInstance().authenticateWithViewController(self, email: emailText, password: passwordText) { (success, errorString) in
             dispatch_async(dispatch_get_main_queue()) {
                 if success {
@@ -49,6 +52,10 @@ class LoginViewController: UIViewController {
                 } else {
                     self.displayAlert("Login Failed", message: errorString)
                 }
+                
+                self.activityIndicator.alpha = 0.0
+                self.activityIndicator.stopAnimating()
+
             }
 
         }
@@ -70,6 +77,9 @@ class LoginViewController: UIViewController {
     }
 
     private func completeLogin() {
+        
+        passwordTextField.text = ""
+        
         let controller = storyboard!.instantiateViewControllerWithIdentifier("NavigationController") as! UINavigationController
         presentViewController(controller, animated: true, completion: nil)
     }

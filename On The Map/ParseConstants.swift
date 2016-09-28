@@ -21,6 +21,14 @@ extension ParseClient {
         
     }
     
+    struct Methods {
+        static let ObjectId = "/{object_id}"
+    }
+    
+    struct URLKeys {
+        static let ObjectId = "object_id"
+    }
+    
     struct ParameterKeys {
         
         static let QueryLimit = "limit"

@@ -65,4 +65,27 @@ extension UdacityClient {
         }
         
     }
+    
+    func logoutSession(completionHandlerForLogout: (success: Bool, errorString: String?) -> Void ) {
+        
+        
+        taskForDELETEMethod(Methods.GetSession) { (result, error, errorString) in
+            
+            if let error = error {
+                print("error: \(error)")
+                completionHandlerForLogout(success: false, errorString: "getUserData Failed")
+            } else {
+                print("logoutSession Result: \(result)")
+                if let _ = result as? [String: AnyObject] {
+                    
+                    completionHandlerForLogout(success: true, errorString: nil)
+                } else {
+                    completionHandlerForLogout(success: false, errorString: "getUerData Failed")
+                }
+            }
+            
+
+        }
+    }
+        
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 extension ParseClient {
@@ -89,4 +90,22 @@ extension ParseClient {
 
         }
     }
+    
+    func updateStudentLocation(presentingVC: UIViewController?, objectId: String, studentLocation: StudentLocation, completionHandlerForStudentLocation: (presentingVC: UIViewController?, success: Bool, error: NSError?) -> Void) {
+        
+        let jsonBody = "{\"uniqueKey\": \"\(studentLocation.uniqueKey!)\", \"firstName\": \"\(studentLocation.firstName!)\", \"lastName\": \"\(studentLocation.lastName!)\",\"mapString\": \"\(studentLocation.mapString!)\", \"mediaURL\": \"\(studentLocation.mediaURL!)\",\"latitude\": \(studentLocation.latitude!), \"longitude\": \(studentLocation.longitude!)}"
+        
+        taskForPUTMethod(Utility.sharedInstance().subtituteKeyInMethod(Methods.ObjectId, key: URLKeys.ObjectId , value: objectId)! , jsonBody: jsonBody) { (result, error, errorString) in
+            if let error = error {
+                print("error: \(error)")
+                completionHandlerForStudentLocation(presentingVC: nil, success: false, error: NSError(domain: "newStudentLocation parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse newStudentLocation"]))
+            } else {
+                print("newSessionIdWith Result: \(result) with objectId: \(objectId)")
+                completionHandlerForStudentLocation(presentingVC: presentingVC, success: true, error: nil)
+
+            }
+            
+        }
+    }
+
 }

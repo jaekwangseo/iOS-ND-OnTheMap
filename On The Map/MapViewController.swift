@@ -20,9 +20,25 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // The map. See the setup in the Storyboard file. Note particularly that the view controller
     // is set up as the map view's delegate.
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var mapView: MKMapView!
     
-    var studentLocations: [StudentLocation] = [StudentLocation]()
+    var studentLocations: [StudentLocation] = [StudentLocation]() {
+        didSet {
+            
+            //Copy student locations data to TableViewController
+            if let tableViewController = self.tabBarController?.viewControllers?[1] as? TableViewController {
+                tableViewController.studentLocations = studentLocations
+                
+                if let tableView = tableViewController.studentLocationTableView {
+                    tableView.reloadData()
+                }
+            }
+
+            
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,10 +47,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
         
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: #selector(refresh))
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addMyLocation))
+        let addButton = UIBarButtonItem(image: UIImage(named: "pin") , style: .Plain, target: self, action: #selector(addMyLocation))
+        let logoutButton = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: #selector(logout))
         
-        parentViewController!.navigationItem.rightBarButtonItem = refreshButton
-        parentViewController!.navigationItem.leftBarButtonItem = addButton
+        parentViewController?.navigationItem.rightBarButtonItems = [refreshButton, addButton]
+        parentViewController!.navigationItem.leftBarButtonItem = logoutButton
         
         loadStudentLocations()
         
@@ -47,56 +64,83 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
         
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        parentViewController!.navigationItem.leftBarButtonItem?.enabled = true
+        self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = false
+        
+        //Get public user data
+        UdacityClient.sharedInstance().getUserData((UdacityClient.sharedInstance().currentUser?.uniqueKey)!, completionHandlerForUserData: { (success, user, errorString) in
+            
+            print(user)
+            
+            UdacityClient.sharedInstance().currentUser?.firstName = user?.firstName
+            UdacityClient.sharedInstance().currentUser?.lastName = user?.lastName
+            UdacityClient.sharedInstance().currentUser?.uniqueKey = user?.uniqueKey
+            
+            
+        })
+        
+        //Check if a location exists for this user
+        ParseClient.sharedInstance().getStudentLocation((UdacityClient.sharedInstance().currentUser?.uniqueKey)!) { (result, error) in
+            
+            if result != nil {
+                ParseClient.sharedInstance().studentLocation = result
+            } else {
+                ParseClient.sharedInstance().studentLocation = nil
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = true
+            })
+            
+        }
+
+        
     }
     
     func addMyLocation() {
         
-        parentViewController!.navigationItem.leftBarButtonItem!.enabled = false
+        self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = false
         
-        guard let userKey = UdacityClient.sharedInstance().currentUser?.uniqueKey else {
+        guard UdacityClient.sharedInstance().currentUser?.uniqueKey != nil else {
             print("addMyLocation error. No userKey exist.")
             return
         }
         
-        
-        //Check if a location exists for this user
-        ParseClient.sharedInstance().getStudentLocation(userKey) { (result, error) in
+        if ParseClient.sharedInstance().studentLocation != nil {
+            let alertController = UIAlertController(title: "Overwrite", message: "You Have Already Posted a Student Location. Would You Like to Overwrite Your Current Location?", preferredStyle: .Alert)
             
-            if result != nil {
-                //There is already a studentLocation for this user.
+            let overwriteAction = UIAlertAction(title: "Overwrite", style: .Default ) { (action) in
                 
-                //Show an alert saying there is an already a studentLocation. Prompt for update.
-                
-                
-            } else {
-                //There is no studentLocation for this user.
-                //Go to create new studentLocation page.
-                
-                //Get public user data
-                UdacityClient.sharedInstance().getUserData((UdacityClient.sharedInstance().currentUser?.uniqueKey)!, completionHandlerForUserData: { (success, user, errorString) in
+                //Modally present new student location view
+                dispatch_async(dispatch_get_main_queue()) {
                     
-                    print(user)
+                    self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = true
+                    let postingView = self.storyboard!.instantiateViewControllerWithIdentifier("InformationPostingView")
+                    self.presentViewController(postingView, animated: true, completion: nil)
                     
-                    UdacityClient.sharedInstance().currentUser?.firstName = user?.firstName
-                    UdacityClient.sharedInstance().currentUser?.lastName = user?.lastName
-                    UdacityClient.sharedInstance().currentUser?.uniqueKey = user?.uniqueKey
-                    
-                    //Modally present new student location view
-                    dispatch_async(dispatch_get_main_queue()) {
-                    
-                        let postingView = self.storyboard!.instantiateViewControllerWithIdentifier("InformationPostingView")
-                        self.presentViewController(postingView, animated: true, completion: nil)
-                    }
-                    
-                })
-                
-                
+                }
             }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action) in
+                
+                self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = true
+                
+            })
+            
+            alertController.addAction(cancelAction)
+            alertController.addAction(overwriteAction)
+            
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
+            
+        } else {
+            
+            let postingView = self.storyboard!.instantiateViewControllerWithIdentifier("InformationPostingView")
+            self.presentViewController(postingView, animated: true, completion: nil)
+            self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = true
+        
         }
+        
+        
     }
 
     
@@ -149,7 +193,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 // When the array is complete, we add the annotations to the map.
                 
                 dispatch_async(dispatch_get_main_queue(), {
+                    self.mapView.removeAnnotations(self.mapView.annotations)
                     self.mapView.addAnnotations(annotations)
+                    
+                    self.activityIndicator.alpha = 0.0
+                    self.activityIndicator.stopAnimating()
                 })
                 
                 
@@ -157,8 +205,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 print(error)
                 
                 dispatch_async(dispatch_get_main_queue(), {
+                    
+                    self.activityIndicator.alpha = 0.0
+                    self.activityIndicator.stopAnimating()
+                    
                     self.displayAlert("Couldn't load locations", message: "Couldn't load student information.")
+                    
+                    
                 })
+                
                 
                 
             }
@@ -168,18 +223,57 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func refresh() {
+        
+        activityIndicator.alpha = 1.0
+        activityIndicator.startAnimating()
+        
         loadStudentLocations()
         
-        //Copy student locations data to TableViewController
-        if let tableViewController = self.tabBarController?.viewControllers?[1] as? TableViewController {
-            tableViewController.studentLocations = studentLocations
-            
-            if let tableView = tableViewController.studentLocationTableView {
-                tableView.reloadData()
-            }
-        }
-
     }
+    
+    func logout() {
+        
+        if let selectedVCIsMapVC = tabBarController?.selectedViewController as? MapViewController {
+            
+            selectedVCIsMapVC.activityIndicator.alpha = 1.0
+            selectedVCIsMapVC.activityIndicator.startAnimating()
+            
+        } else if let selectedVCIsTableVC = tabBarController?.selectedViewController as? TableViewController {
+            
+            selectedVCIsTableVC.activityIndicator.alpha = 1.0
+            selectedVCIsTableVC.activityIndicator.startAnimating()
+            
+        }
+        
+        UdacityClient.sharedInstance().logoutSession { (success, errorString) in
+            
+            if success {
+                dispatch_async(dispatch_get_main_queue(), {
+                    
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                    
+                })
+                
+            } else {
+                print("logout failed")
+            }
+            
+            if let selectedVCIsMapVC = self.tabBarController?.selectedViewController as? MapViewController {
+                
+                selectedVCIsMapVC.activityIndicator.alpha = 0.0
+                selectedVCIsMapVC.activityIndicator.stopAnimating()
+                
+            } else if let selectedVCIsTableVC = self.tabBarController?.selectedViewController as? TableViewController {
+                
+                selectedVCIsTableVC.activityIndicator.alpha = 0.0
+                selectedVCIsTableVC.activityIndicator.stopAnimating()
+                
+            }
+            
+        }
+    
+    }
+    
     
     func displayAlert(title: String?, message: String?) {
         
@@ -229,7 +323,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let app = UIApplication.sharedApplication()
             if let toOpen = view.annotation?.subtitle! {
                 
-                app.openURL(NSURL(string: toOpen)!)
+                guard let url = NSURL(string: toOpen) else {
+                    displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(toOpen)")
+                    return
+                }
+                
+                let result = app.openURL(url)
+                if !result {
+                    displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(toOpen)")
+                }
             }
         }
     }
