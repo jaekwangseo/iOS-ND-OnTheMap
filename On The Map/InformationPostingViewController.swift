@@ -40,16 +40,22 @@ class InformationPostingViewController: UIViewController, MKMapViewDelegate, UIT
         
         linkTextView.delegate = self
         geocode.delegate = self
+        
+        
     }
     
     func textViewDidEndEditing(textView: UITextView) {
         self.view.endEditing(true)
     }
-    /*
-    func textViewShouldEndEditing(textView: UITextView) -> Bool {
-        self.view.endEditing(true)
-        return false
-    }*/
+
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
     
     
     func textViewDidBeginEditing(textView: UITextView) {
@@ -252,4 +258,6 @@ class InformationPostingViewController: UIViewController, MKMapViewDelegate, UIT
         
         return pinView
     }
+    
+   
 }
