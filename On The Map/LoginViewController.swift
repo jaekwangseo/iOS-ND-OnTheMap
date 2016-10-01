@@ -24,7 +24,7 @@ class LoginViewController: UIViewController {
         let webAuthNavigationController = UINavigationController()
         webAuthNavigationController.pushViewController(webViewController, animated: false)
         
-        self.presentViewController(webAuthNavigationController, animated: true, completion: nil)
+        presentViewController(webAuthNavigationController, animated: true, completion: nil)
         
     }
     
@@ -45,8 +45,8 @@ class LoginViewController: UIViewController {
         activityIndicator.alpha = 1.0
         activityIndicator.startAnimating()
         
-        UdacityClient.sharedInstance().authenticateWithViewController(self, email: emailText, password: passwordText) { (success, errorString) in
-            dispatch_async(dispatch_get_main_queue()) {
+        UdacityClient.sharedInstance.authenticateWithViewController(self, email: emailText, password: passwordText) { (success, errorString) in
+            performUIUpdatesOnMain {
                 if success {
                     self.completeLogin()
                 } else {
@@ -62,20 +62,6 @@ class LoginViewController: UIViewController {
         
     }
     
-    func displayAlert(title: String?, message: String?) {
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        
-        let okAction = UIAlertAction(title: "OK", style: .Default ) { (action) in
-            
-        }
-        
-        alertController.addAction(okAction)
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-        
-    }
-
     private func completeLogin() {
         
         passwordTextField.text = ""

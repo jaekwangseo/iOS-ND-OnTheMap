@@ -6,10 +6,29 @@
          contextName = "InformationPostingViewController.submit(UIButton) -&gt; ():InformationPostingViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "MapViewController.(viewDidLoad() -&gt; ()).(closure #1).(closure #1):MapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UdacityClient.sharedInstance.currentUser">
+            </PersistentString>
+            <PersistentString
+               value = "ParseClient.sharedInstance.studentLocation">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "InformationPostingViewController.(submit(UIButton) -&gt; ()).(closure #1).(closure #1):InformationPostingViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "success">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "MapViewController.viewDidLoad() -&gt; ():MapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UdacityClient.sharedInstance.currentUser?.uniqueKey">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -25,6 +44,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "MapViewController.addMyLocation() -&gt; ():MapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UdacityClient.sharedInstance.currentUser?.uniqueKey">
+            </PersistentString>
+            <PersistentString
+               value = "UdacityClient.sharedInstance.currentUser">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "InformationPostingViewController.(submit(UIButton) -&gt; ()).(closure #1):InformationPostingViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -32,17 +62,6 @@
             </PersistentString>
             <PersistentString
                value = "nav.childViewControllers[0].">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "MapViewController.addMyLocation() -&gt; ():MapViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "ParseClient.sharedInstance().studentLocationExist">
-            </PersistentString>
-            <PersistentString
-               value = "UdacityClient.sharedInstance().currentUser?.uniqueKey">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -68,6 +87,11 @@
       </ContextState>
       <ContextState
          contextName = "MapViewController.(viewDidLoad() -&gt; ()).(closure #2):MapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UdacityClient.sharedInstance.currentUser">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "UdacityClient.(getUserData(String, completionHandlerForUserData : (success : [[String : AnyObject]]?, errorString : String?) -&gt; ()) -&gt; ()).(closure #1):UdacityConvenience.swift">
@@ -80,6 +104,14 @@
             </PersistentString>
             <PersistentString
                value = "udacityUser.firstName">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "MapViewController.(viewDidLoad() -&gt; ()).(closure #1):MapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UdacityClient.sharedInstance.currentUser?.uniqueKey">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

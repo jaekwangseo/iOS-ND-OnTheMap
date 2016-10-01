@@ -24,21 +24,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var mapView: MKMapView!
     
-    var studentLocations: [StudentLocation] = [StudentLocation]() {
-        didSet {
-            
-            //Copy student locations data to TableViewController
-            if let tableViewController = self.tabBarController?.viewControllers?[1] as? TableViewController {
-                tableViewController.studentLocations = studentLocations
-                
-                if let tableView = tableViewController.studentLocationTableView {
-                    tableView.reloadData()
-                }
-            }
-
-            
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,44 +40,40 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         loadStudentLocations()
         
-        //Copy student locations data to TableViewController
-        if let tableViewController = self.tabBarController?.viewControllers?[1] as? TableViewController {
-            tableViewController.studentLocations = studentLocations
-            
-            if let tableView = tableViewController.studentLocationTableView {
-                tableView.reloadData()
-            }
-        }
-        
         self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = false
         
         //Get public user data
-        UdacityClient.sharedInstance().getUserData((UdacityClient.sharedInstance().currentUser?.uniqueKey)!, completionHandlerForUserData: { (success, user, errorString) in
+        UdacityClient.sharedInstance.getUserData((UdacityClient.sharedInstance.currentUser?.uniqueKey)!, completionHandlerForUserData: { (success, user, errorString) in
             
             print(user)
             
-            UdacityClient.sharedInstance().currentUser?.firstName = user?.firstName
-            UdacityClient.sharedInstance().currentUser?.lastName = user?.lastName
-            UdacityClient.sharedInstance().currentUser?.uniqueKey = user?.uniqueKey
+            UdacityClient.sharedInstance.currentUser?.firstName = user?.firstName
+            UdacityClient.sharedInstance.currentUser?.lastName = user?.lastName
+            UdacityClient.sharedInstance.currentUser?.uniqueKey = user?.uniqueKey
             
+            //TEST
+            UdacityClient.sharedInstance.currentUser?.firstName = "Johnny"
+            UdacityClient.sharedInstance.currentUser?.lastName = "Depp"
+            UdacityClient.sharedInstance.currentUser?.uniqueKey = "TESTKEY3"
+            //TEST
+            
+            //Check if a location exists for this user
+            ParseClient.sharedInstance.getStudentLocation((UdacityClient.sharedInstance.currentUser?.uniqueKey)!) { (result, error) in
+                
+                if result != nil {
+                    ParseClient.sharedInstance.studentLocation = result
+                } else {
+                    ParseClient.sharedInstance.studentLocation = nil
+                }
+                
+                performUIUpdatesOnMain {
+                    self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = true
+                }
+                
+            }
             
         })
         
-        //Check if a location exists for this user
-        ParseClient.sharedInstance().getStudentLocation((UdacityClient.sharedInstance().currentUser?.uniqueKey)!) { (result, error) in
-            
-            if result != nil {
-                ParseClient.sharedInstance().studentLocation = result
-            } else {
-                ParseClient.sharedInstance().studentLocation = nil
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = true
-            })
-            
-        }
-
         
     }
     
@@ -100,18 +81,18 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = false
         
-        guard UdacityClient.sharedInstance().currentUser?.uniqueKey != nil else {
+        guard UdacityClient.sharedInstance.currentUser?.uniqueKey != nil else {
             print("addMyLocation error. No userKey exist.")
             return
         }
         
-        if ParseClient.sharedInstance().studentLocation != nil {
+        if ParseClient.sharedInstance.studentLocation != nil {
             let alertController = UIAlertController(title: "Overwrite", message: "You Have Already Posted a Student Location. Would You Like to Overwrite Your Current Location?", preferredStyle: .Alert)
             
             let overwriteAction = UIAlertAction(title: "Overwrite", style: .Default ) { (action) in
                 
                 //Modally present new student location view
-                dispatch_async(dispatch_get_main_queue()) {
+                performUIUpdatesOnMain {
                     
                     self.parentViewController?.navigationItem.rightBarButtonItems![1].enabled = true
                     let postingView = self.storyboard!.instantiateViewControllerWithIdentifier("InformationPostingView")
@@ -145,12 +126,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     
     func loadStudentLocations() {
-        ParseClient.sharedInstance().getStudentLocations(100, completionHandlerForStudentLocations: { (studentLocations, error) in
+        ParseClient.sharedInstance.getStudentLocations(100, completionHandlerForStudentLocations: { (studentLocations, error) in
             
             if let studentLocations = studentLocations {
                 
                 
-                self.studentLocations = studentLocations
+                SharedData.sharedInstance.studentLocations = studentLocations
                 
                 // We will create an MKPointAnnotation for each dictionary in "locations". The
                 // point annotations will be stored in this array, and then provided to the map view.
@@ -192,27 +173,26 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
                 // When the array is complete, we add the annotations to the map.
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                performUIUpdatesOnMain {
                     self.mapView.removeAnnotations(self.mapView.annotations)
                     self.mapView.addAnnotations(annotations)
                     
                     self.activityIndicator.alpha = 0.0
                     self.activityIndicator.stopAnimating()
-                })
+                }
                 
                 
             } else {
                 print(error)
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                performUIUpdatesOnMain {
                     
                     self.activityIndicator.alpha = 0.0
                     self.activityIndicator.stopAnimating()
                     
                     self.displayAlert("Couldn't load locations", message: "Couldn't load student information.")
                     
-                    
-                })
+                }
                 
                 
                 
@@ -245,14 +225,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
         }
         
-        UdacityClient.sharedInstance().logoutSession { (success, errorString) in
+        UdacityClient.sharedInstance.logoutSession { (success, errorString) in
             
             if success {
-                dispatch_async(dispatch_get_main_queue(), {
+                performUIUpdatesOnMain {
                     
                     self.dismissViewControllerAnimated(true, completion: nil)
                     
-                })
+                }
                 
             } else {
                 print("logout failed")
@@ -273,22 +253,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     
     }
-    
-    
-    func displayAlert(title: String?, message: String?) {
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        
-        let okAction = UIAlertAction(title: "OK", style: .Default ) { (action) in
-            
-        }
-        
-        alertController.addAction(okAction)
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-        
-    }
-
     
     
     // MARK: - MKMapViewDelegate
@@ -335,17 +299,5 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
-    //    func mapView(mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-    //
-    //        if control == annotationView.rightCalloutAccessoryView {
-    //            let app = UIApplication.sharedApplication()
-    //            app.openURL(NSURL(string: annotationView.annotation.subtitle))
-    //        }
-    //    }
-    
-    // MARK: - Sample Data
-    
-    // Some sample data. This is a dictionary that is more or less similar to the
-    // JSON data that you will download from Parse.
 
 }

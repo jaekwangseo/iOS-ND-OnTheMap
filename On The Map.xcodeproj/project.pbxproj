@@ -11,6 +11,9 @@
 		440DAA191D91C953001F9558 /* UdacityUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440DAA181D91C953001F9558 /* UdacityUser.swift */; };
 		440DAA1B1D91D85C001F9558 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440DAA1A1D91D85C001F9558 /* Utility.swift */; };
 		440DAA1D1D92DC16001F9558 /* InformationPostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440DAA1C1D92DC16001F9558 /* InformationPostingViewController.swift */; };
+		440DAA1F1D9D63AD001F9558 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440DAA1E1D9D63AD001F9558 /* UIViewControllerExtension.swift */; };
+		440DAA211D9D66D9001F9558 /* GCDWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440DAA201D9D66D9001F9558 /* GCDWrapper.swift */; };
+		440DAA231D9D6E70001F9558 /* SharedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440DAA221D9D6E70001F9558 /* SharedData.swift */; };
 		4416A3901D819F3A00ED22DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4416A38F1D819F3A00ED22DA /* AppDelegate.swift */; };
 		4416A3921D819F3A00ED22DA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4416A3911D819F3A00ED22DA /* LoginViewController.swift */; };
 		4416A3951D819F3A00ED22DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4416A3931D819F3A00ED22DA /* Main.storyboard */; };
@@ -51,6 +54,9 @@
 		440DAA181D91C953001F9558 /* UdacityUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityUser.swift; sourceTree = "<group>"; };
 		440DAA1A1D91D85C001F9558 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		440DAA1C1D92DC16001F9558 /* InformationPostingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InformationPostingViewController.swift; sourceTree = "<group>"; };
+		440DAA1E1D9D63AD001F9558 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
+		440DAA201D9D66D9001F9558 /* GCDWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCDWrapper.swift; sourceTree = "<group>"; };
+		440DAA221D9D6E70001F9558 /* SharedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedData.swift; sourceTree = "<group>"; };
 		4416A38C1D819F3A00ED22DA /* On The Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On The Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4416A38F1D819F3A00ED22DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4416A3911D819F3A00ED22DA /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -124,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				4416A38F1D819F3A00ED22DA /* AppDelegate.swift */,
+				440DAA201D9D66D9001F9558 /* GCDWrapper.swift */,
 				4416A3C11D8341E600ED22DA /* Model */,
 				4416A3C01D8341DE00ED22DA /* View */,
 				4416A3BD1D83418700ED22DA /* Controller */,
@@ -159,6 +166,7 @@
 				4416A3F81D8B096D00ED22DA /* WebViewController.swift */,
 				440DAA161D8C3E1F001F9558 /* MapViewController.swift */,
 				440DAA1C1D92DC16001F9558 /* InformationPostingViewController.swift */,
+				440DAA1E1D9D63AD001F9558 /* UIViewControllerExtension.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -199,9 +207,10 @@
 		4416A3C21D8342BD00ED22DA /* Clients */ = {
 			isa = PBXGroup;
 			children = (
+				440DAA1A1D91D85C001F9558 /* Utility.swift */,
+				440DAA221D9D6E70001F9558 /* SharedData.swift */,
 				4416A3CD1D889DEB00ED22DA /* Parse */,
 				4416A3C41D8342C800ED22DA /* Udacity */,
-				440DAA1A1D91D85C001F9558 /* Utility.swift */,
 			);
 			name = Clients;
 			sourceTree = "<group>";
@@ -361,8 +370,11 @@
 			files = (
 				440DAA1B1D91D85C001F9558 /* Utility.swift in Sources */,
 				4416A3921D819F3A00ED22DA /* LoginViewController.swift in Sources */,
+				440DAA231D9D6E70001F9558 /* SharedData.swift in Sources */,
 				4416A3F91D8B096D00ED22DA /* WebViewController.swift in Sources */,
 				4416A3CC1D889D9400ED22DA /* TableViewController.swift in Sources */,
+				440DAA211D9D66D9001F9558 /* GCDWrapper.swift in Sources */,
+				440DAA1F1D9D63AD001F9558 /* UIViewControllerExtension.swift in Sources */,
 				4416A3CF1D889DFF00ED22DA /* ParseClient.swift in Sources */,
 				4416A3C81D83454600ED22DA /* UdacityConstants.swift in Sources */,
 				440DAA1D1D92DC16001F9558 /* InformationPostingViewController.swift in Sources */,

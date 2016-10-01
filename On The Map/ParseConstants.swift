@@ -33,7 +33,12 @@ extension ParseClient {
         
         static let QueryLimit = "limit"
         static let Where = "where"
+        static let Order = "order"
         
+    }
+    
+    struct ParameterValues {
+        static let UpdatedOrder = "-updatedAt"
     }
     
     struct JSONResponseKeys {

@@ -11,9 +11,9 @@ import Foundation
 
 class UdacityClient: NSObject {
     
+    static let sharedInstance = UdacityClient()
+    
     var currentUser: UdacityUser? = nil
-    
-    
     
     // MARK: POST
     func taskForPOSTMethod(method: String, jsonBody: String, completionHandlerForPOST: (result: AnyObject!, error: NSError?, errorString: String?) -> Void) -> NSURLSessionDataTask {
@@ -228,16 +228,5 @@ class UdacityClient: NSObject {
             return nil
         }
     }
-
-    
-    // MARK: Shared Instance
-    
-    class func sharedInstance() -> UdacityClient {
-        struct Singleton {
-            static var sharedInstance = UdacityClient()
-        }
-        return Singleton.sharedInstance
-    }
-
     
 }

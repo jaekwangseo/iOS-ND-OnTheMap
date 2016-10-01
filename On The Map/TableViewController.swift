@@ -15,20 +15,15 @@ class TableViewController: UIViewController {
     
     @IBOutlet weak var studentLocationTableView: UITableView!
     
-    var studentLocations: [StudentLocation] = []
+    //var studentLocations: [StudentLocation] = []
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        if let mapViewController = self.tabBarController?.viewControllers?[0] as? MapViewController {
-            studentLocations = mapViewController.studentLocations
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), {
+        performUIUpdatesOnMain {
             self.studentLocationTableView.reloadData()
-        })
+        }
 
     }
     
@@ -44,13 +39,13 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
     
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentLocations.count
+        return SharedData.sharedInstance.studentLocations.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         /* Get cell type */
         let cellReuseIdentifier = "StudentLocationTableViewCell"
-        let studentLocation = studentLocations[indexPath.row]
+        let studentLocation = SharedData.sharedInstance.studentLocations[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as UITableViewCell!
         
         /* Set cell defaults */
@@ -69,36 +64,26 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        let studentLocation = studentLocations[indexPath.row]
+        let studentLocation = SharedData.sharedInstance.studentLocations[indexPath.row]
         
         if let urlString = studentLocation.mediaURL {
             print(urlString)
             let app = UIApplication.sharedApplication()
             guard let url = NSURL(string: urlString) else {
-                displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(urlString)")
+                self.displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(urlString)")
+                
+                
                 return
             }
             
             let result = app.openURL(url)
             if !result {
-                displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(urlString)")
+                
+                self.displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(urlString)")
+
             }
 
         }
-    }
-    
-    func displayAlert(title: String?, message: String?) {
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        
-        let okAction = UIAlertAction(title: "OK", style: .Default ) { (action) in
-            
-        }
-        
-        alertController.addAction(okAction)
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-        
     }
 
 }

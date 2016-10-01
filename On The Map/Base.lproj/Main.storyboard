@@ -245,7 +245,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="770" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dBu-80-DeQ" userLabel="Link">
+                            <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="770" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" text="Enter a web link here" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dBu-80-DeQ" userLabel="Link">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="201"/>
                                 <color key="backgroundColor" red="0.25490196079999999" green="0.45882352939999999" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -271,7 +271,7 @@
                                     <action selector="findOnTheMap:" destination="WYE-Wf-qYa" eventType="touchUpInside" id="Gdy-Lx-X0k"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="760" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dCJ-nO-KPk">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="760" text="Enter a location here" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dCJ-nO-KPk">
                                 <rect key="frame" x="0.0" y="135" width="600" height="329"/>
                                 <color key="backgroundColor" red="0.25490196078431371" green="0.45882352941176469" blue="0.64313725490196072" alpha="1" colorSpace="calibratedRGB"/>
                                 <edgeInsets key="layoutMargins" top="100" left="100" bottom="100" right="100"/>

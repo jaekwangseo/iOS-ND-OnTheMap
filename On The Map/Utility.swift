@@ -10,6 +10,8 @@ import Foundation
 
 
 class Utility {
+    
+    static let sharedInstance = Utility()
 
     // substitute the key for the value that is contained within the method name
     func subtituteKeyInMethod(method: String, key: String, value: String) -> String? {
@@ -18,17 +20,6 @@ class Utility {
         } else {
             return nil
         }
-    }
-    
-    // MARK: Shared Instance
-    class func sharedInstance() -> Utility {
-        struct Singleton {
-            static var sharedInstance = Utility()
-        }
-        return Singleton.sharedInstance
-    }
-    
-
-    
+    }    
 }
 

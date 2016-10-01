@@ -10,6 +10,8 @@ import Foundation
 
 class ParseClient: NSObject {
     
+    static let sharedInstance = ParseClient()
+    
     var studentLocation: StudentLocation?
     
     // MARK: GET
@@ -196,16 +198,5 @@ class ParseClient: NSObject {
         
         completionHandlerForConvertData(result: parsedResult, error: nil, errorString: nil)
     }
-    
-
-    
-    // MARK: Shared Instance
-    class func sharedInstance() -> ParseClient {
-        struct Singleton {
-            static var sharedInstance = ParseClient()
-        }
-        return Singleton.sharedInstance
-    }
-    
     
 }

@@ -35,8 +35,8 @@ extension UdacityClient {
                 print("getSessionIdWith Result: \(result)")
                 if let result = result as? [String: AnyObject] {
                     if let account = result[JSONResponseKeys.Account] as? [String: AnyObject]{
-                        UdacityClient.sharedInstance().currentUser = UdacityUser()
-                        UdacityClient.sharedInstance().currentUser?.uniqueKey = account[JSONResponseKeys.UniqueKey] as? String
+                        UdacityClient.sharedInstance.currentUser = UdacityUser()
+                        UdacityClient.sharedInstance.currentUser?.uniqueKey = account[JSONResponseKeys.UniqueKey] as? String
                     }
                 }
                 completionHandlerForSession(success: true, errorString: nil)
@@ -46,7 +46,7 @@ extension UdacityClient {
     
     func getUserData(userKey: String, completionHandlerForUserData: (success: Bool, user: UdacityUser?, errorString: String?) -> Void) {
         
-        taskForGETMethod(Utility.sharedInstance().subtituteKeyInMethod(Methods.User, key: URLKeys.UserId , value: userKey)! ) { (result, error, errorString) in
+        taskForGETMethod(Utility.sharedInstance.subtituteKeyInMethod(Methods.User, key: URLKeys.UserId , value: userKey)! ) { (result, error, errorString) in
             
             if let error = error {
                 print("error: \(error)")

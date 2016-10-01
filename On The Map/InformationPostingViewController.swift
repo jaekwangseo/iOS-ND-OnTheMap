@@ -1,3 +1,4 @@
+
 //
 //  InformationPostingViewController.swift
 //  On The Map
@@ -10,7 +11,7 @@ import UIKit
 import Foundation
 import MapKit
 
-class InformationPostingViewController: UIViewController, MKMapViewDelegate {
+class InformationPostingViewController: UIViewController, MKMapViewDelegate, UITextViewDelegate {
     
     var latitude: Double?
     var longitude: Double?
@@ -33,12 +34,34 @@ class InformationPostingViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var geocode: UITextView!
     
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+        linkTextView.delegate = self
+        geocode.delegate = self
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        self.view.endEditing(true)
+    }
+    /*
+    func textViewShouldEndEditing(textView: UITextView) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }*/
+    
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+        textView.text = ""
+    }
+    
+    
     @IBAction func cancel(sender: UIButton) {
     
         self.dismissViewControllerAnimated(true, completion: nil)
         
     }
-    
     
     @IBAction func findOnTheMap(sender: UIButton) {
         
@@ -51,9 +74,9 @@ class InformationPostingViewController: UIViewController, MKMapViewDelegate {
             geocoder.geocodeAddressString(geocode.text, completionHandler: { (placemarks, error) in
                 
                 if let placemark = placemarks?[0] {
-                    dispatch_async(dispatch_get_main_queue(), { 
+                    performUIUpdatesOnMain {
                         self.disableUIs()
-                    })
+                    }
     
                     self.latitude = placemark.location?.coordinate.latitude
                     self.longitude = placemark.location?.coordinate.longitude
@@ -72,25 +95,25 @@ class InformationPostingViewController: UIViewController, MKMapViewDelegate {
                     //Set region zoom
                     let viewRegion = MKCoordinateRegionMakeWithDistance(coordinate, 500_000, 500_000)
                    
-                    dispatch_async(dispatch_get_main_queue(), {
+                    performUIUpdatesOnMain {
                         self.mapView.addAnnotation(annotation)
                         self.mapView.centerCoordinate = annotation.coordinate;
                         let adjustedRegion = self.mapView.regionThatFits(viewRegion)
                         self.mapView.setRegion(adjustedRegion, animated: true)
 
-                    })
+                    }
 
                     
                 } else {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.displayAlert("Not a valid address!", message: nil)
-                    })
+                    performUIUpdatesOnMain {
+                        self.displayAlert("Geocoding Failed.", message: nil)
+                    }
                     
                 }
-                dispatch_async(dispatch_get_main_queue(), {
+                performUIUpdatesOnMain {
                     self.activityIndicator.alpha = 0.0
                     self.activityIndicator.stopAnimating()
-                })
+                }
 
                 
             })
@@ -102,60 +125,54 @@ class InformationPostingViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func submit(sender: UIButton) {
         
+        activityIndicator.alpha = 1.0
+        activityIndicator.startAnimating()
+        sender.enabled = false
+        
         linkString = linkTextView.text
         
-        var studentLocation = StudentLocation(uniqueKey: UdacityClient.sharedInstance().currentUser!.uniqueKey! , firstName: UdacityClient.sharedInstance().currentUser!.firstName!, lastName: UdacityClient.sharedInstance().currentUser!.lastName!, mapString: self.mapString!, mediaURL: linkString!, latitude: latitude!, longitude: longitude!)
+        var studentLocation = StudentLocation(uniqueKey: UdacityClient.sharedInstance.currentUser!.uniqueKey! , firstName: UdacityClient.sharedInstance.currentUser!.firstName!, lastName: UdacityClient.sharedInstance.currentUser!.lastName!, mapString: self.mapString!, mediaURL: linkString!, latitude: latitude!, longitude: longitude!)
         
-        if ParseClient.sharedInstance().studentLocation != nil {
+        // Check whether this user already has a studentlocation.
+        if ParseClient.sharedInstance.studentLocation != nil {
             
-            let oldObjectId = ParseClient.sharedInstance().studentLocation?.objectId
+            //This user already has a studentlocation.
             
-            ParseClient.sharedInstance().updateStudentLocation(self.presentingViewController, objectId: oldObjectId!, studentLocation: studentLocation, completionHandlerForStudentLocation: { (presentingVC, success, error) in
+            let oldObjectId = ParseClient.sharedInstance.studentLocation?.objectId
+            
+            ParseClient.sharedInstance.updateStudentLocation(self.presentingViewController, objectId: oldObjectId!, studentLocation: studentLocation, completionHandlerForStudentLocation: { (presentingVC, success, error) in
                 
                 if success {
                     
-                    if let nav = presentingVC as? UINavigationController {
-                        print("it's a navigation controller")
-                            
-                        if let tabbarcontroller = nav.childViewControllers[0] as? UITabBarController {
-                            
-                            if let map = tabbarcontroller.viewControllers?[0] as? MapViewController {
-                            
-                                
-                                
-                                dispatch_async(dispatch_get_main_queue(), {
-                                    map.refresh()
-                                    let coordinate = CLLocationCoordinate2D(latitude: self.latitude!, longitude: self.longitude!)
-                                    let viewRegion = MKCoordinateRegionMakeWithDistance(coordinate, 500_000, 500_000)
-                                    let adjustedRegion = map.mapView.regionThatFits(viewRegion)
-                                    map.mapView.setRegion(adjustedRegion, animated: true)
-                                    map.mapView.centerCoordinate = coordinate
-                                    
-                                })
-                            }
-                        }
-
-                    }
+                    self.handleSuccessfulUpdate(presentingVC)
 
                     
                 } else {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.displayAlert("Failed", message: "Failed to update student location" )
-                    })
-                    
+                    self.handleFailedUpdate(sender)
                 }
 
             })
 
             
         } else {
-            ParseClient.sharedInstance().newStudentLocation(studentLocation) { (objectId, error) in
-                studentLocation.objectId = objectId
-                ParseClient.sharedInstance().studentLocation = studentLocation
+            
+            //This user does not have a studentlocation.
+            
+            ParseClient.sharedInstance.newStudentLocation(self.presentingViewController, studentLocation: studentLocation) { (presentingVC, objectId, error) in
+                
+                if error == nil {
+                    
+                    studentLocation.objectId = objectId
+                    ParseClient.sharedInstance.studentLocation = studentLocation
+                    self.handleSuccessfulUpdate(presentingVC)
+                } else {
+                    self.handleFailedUpdate(sender)
+                }
+            
             }
         }
         
-        dismissViewControllerAnimated(true, completion: nil)
+        
         
     }
 
@@ -174,19 +191,48 @@ class InformationPostingViewController: UIViewController, MKMapViewDelegate {
 
     }
     
-    func displayAlert(title: String?, message: String?) {
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        
-        let alertAction = UIAlertAction(title: "OK", style: .Default ) { (action) in
+    func handleSuccessfulUpdate(presentingVC: UIViewController?) {
+        if let nav = presentingVC as? UINavigationController {
             
+            if let tabbarcontroller = nav.childViewControllers[0] as? UITabBarController {
+                
+                if let map = tabbarcontroller.viewControllers?[0] as? MapViewController {
+                    
+                    
+                    
+                    performUIUpdatesOnMain {
+                        map.refresh()
+                        let coordinate = CLLocationCoordinate2D(latitude: self.latitude!, longitude: self.longitude!)
+                        let viewRegion = MKCoordinateRegionMakeWithDistance(coordinate, 500_000, 500_000)
+                        let adjustedRegion = map.mapView.regionThatFits(viewRegion)
+                        map.mapView.setRegion(adjustedRegion, animated: true)
+                        map.mapView.centerCoordinate = coordinate
+                        
+                        self.activityIndicator.alpha = 0.0
+                        self.activityIndicator.stopAnimating()
+                        
+                        
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }
+                }
+            }
         }
-        
-        alertController.addAction(alertAction)
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-    
     }
+    
+    func handleFailedUpdate(sender: UIButton) {
+        performUIUpdatesOnMain {
+            
+            self.activityIndicator.alpha = 0.0
+            self.activityIndicator.stopAnimating()
+            
+            sender.enabled = true
+            
+            self.displayAlert("Failed", message: "Failed to update student location" )
+            //self.dismissViewControllerAnimated(true, completion: nil)
+        }
+
+    }
+
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         
@@ -206,6 +252,4 @@ class InformationPostingViewController: UIViewController, MKMapViewDelegate {
         
         return pinView
     }
-
-    
 }

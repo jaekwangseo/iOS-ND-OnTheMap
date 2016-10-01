@@ -14,8 +14,9 @@ extension ParseClient {
     
     func getStudentLocations(queryLimit: Int, completionHandlerForStudentLocations: (result: [StudentLocation]?, error: NSError?) -> Void) {
         
-        let parameters = [
-            ParameterKeys.QueryLimit: queryLimit
+        let parameters: [String: AnyObject] = [
+            ParameterKeys.QueryLimit: queryLimit,
+            ParameterKeys.Order: ParameterValues.UpdatedOrder
         ]
         
         taskForGETMethod("", parameters: parameters) { (result, error, errorString) in
@@ -68,22 +69,22 @@ extension ParseClient {
         }
     }
     
-    func newStudentLocation(studentLocation: StudentLocation, completionHandlerForStudentLocation: (objectId: String?, error: NSError?) -> Void) {
+    func newStudentLocation(presentingVC: UIViewController?, studentLocation: StudentLocation, completionHandlerForStudentLocation: (presentingVC: UIViewController?, objectId: String?, error: NSError?) -> Void) {
         
         let jsonBody = "{\"uniqueKey\": \"\(studentLocation.uniqueKey!)\", \"firstName\": \"\(studentLocation.firstName!)\", \"lastName\": \"\(studentLocation.lastName!)\",\"mapString\": \"\(studentLocation.mapString!)\", \"mediaURL\": \"\(studentLocation.mediaURL!)\",\"latitude\": \(studentLocation.latitude!), \"longitude\": \(studentLocation.longitude!)}"
         
         taskForPOSTMethod("", jsonBody: jsonBody) { (result, error, errorString) in
             if let error = error {
                 print("error: \(error)")
-                completionHandlerForStudentLocation(objectId: nil, error: NSError(domain: "newStudentLocation parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse newStudentLocation"]))
+                completionHandlerForStudentLocation(presentingVC: nil, objectId: nil, error: NSError(domain: "newStudentLocation parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse newStudentLocation"]))
             } else {
                 print("newSessionIdWith Result: \(result)")
                 if let result = result as? [String: AnyObject], let objectId = result[JSONResponseKeys.ObjectId] as? String {
                     
-                    completionHandlerForStudentLocation(objectId: objectId, error: nil)
+                    completionHandlerForStudentLocation(presentingVC: presentingVC, objectId: objectId, error: nil)
                     
                 } else {
-                    completionHandlerForStudentLocation(objectId: nil, error: NSError(domain: "newStudentLocation parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse newStudentLocation"]))
+                    completionHandlerForStudentLocation(presentingVC: nil, objectId: nil, error: NSError(domain: "newStudentLocation parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse newStudentLocation"]))
                 }
                 
             }
@@ -95,7 +96,7 @@ extension ParseClient {
         
         let jsonBody = "{\"uniqueKey\": \"\(studentLocation.uniqueKey!)\", \"firstName\": \"\(studentLocation.firstName!)\", \"lastName\": \"\(studentLocation.lastName!)\",\"mapString\": \"\(studentLocation.mapString!)\", \"mediaURL\": \"\(studentLocation.mediaURL!)\",\"latitude\": \(studentLocation.latitude!), \"longitude\": \(studentLocation.longitude!)}"
         
-        taskForPUTMethod(Utility.sharedInstance().subtituteKeyInMethod(Methods.ObjectId, key: URLKeys.ObjectId , value: objectId)! , jsonBody: jsonBody) { (result, error, errorString) in
+        taskForPUTMethod(Utility.sharedInstance.subtituteKeyInMethod(Methods.ObjectId, key: URLKeys.ObjectId , value: objectId)! , jsonBody: jsonBody) { (result, error, errorString) in
             if let error = error {
                 print("error: \(error)")
                 completionHandlerForStudentLocation(presentingVC: nil, success: false, error: NSError(domain: "newStudentLocation parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse newStudentLocation"]))
