@@ -45,17 +45,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         //Get public user data
         UdacityClient.sharedInstance.getUserData((UdacityClient.sharedInstance.currentUser?.uniqueKey)!, completionHandlerForUserData: { (success, user, errorString) in
             
-            print(user)
-            
             UdacityClient.sharedInstance.currentUser?.firstName = user?.firstName
             UdacityClient.sharedInstance.currentUser?.lastName = user?.lastName
             UdacityClient.sharedInstance.currentUser?.uniqueKey = user?.uniqueKey
-            
-            //TEST
-            UdacityClient.sharedInstance.currentUser?.firstName = "Johnny"
-            UdacityClient.sharedInstance.currentUser?.lastName = "Depp"
-            UdacityClient.sharedInstance.currentUser?.uniqueKey = "TESTKEY3"
-            //TEST
             
             //Check if a location exists for this user
             ParseClient.sharedInstance.getStudentLocation((UdacityClient.sharedInstance.currentUser?.uniqueKey)!) { (result, error) in

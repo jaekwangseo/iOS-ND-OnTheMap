@@ -23,8 +23,6 @@ class ParseClient: NSObject {
         
         let session = NSURLSession.sharedSession()
 
-        print("request.URL: \(request.URL)")
-        
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             
             func sendError(error: String) {

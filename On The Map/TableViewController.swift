@@ -67,7 +67,7 @@ extension TableViewController: UITableViewDelegate, UITableViewDataSource {
         let studentLocation = SharedData.sharedInstance.studentLocations[indexPath.row]
         
         if let urlString = studentLocation.mediaURL {
-            print(urlString)
+            
             let app = UIApplication.sharedApplication()
             guard let url = NSURL(string: urlString) else {
                 self.displayAlert("Couldn't open the URL", message: "Couldn't open the URL: \(urlString)")
