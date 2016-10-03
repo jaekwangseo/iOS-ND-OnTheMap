@@ -18,21 +18,10 @@ struct UdacityUser {
     
     init(dictionary: [String:AnyObject]) {
         
-        if let uniqueKey = dictionary[UdacityClient.JSONResponseKeys.UniqueKey] as? String {
-            self.uniqueKey = uniqueKey
-        } else {
-            self.uniqueKey = nil
-        }
-        if let firstName = dictionary[UdacityClient.JSONResponseKeys.FirstName] as? String {
-            self.firstName = firstName
-        } else {
-            self.firstName = nil
-        }
-        if let lastName = dictionary[UdacityClient.JSONResponseKeys.LastName] as? String {
-            self.lastName = lastName
-        } else {
-            self.lastName = nil
-        }
+        self.uniqueKey = dictionary[UdacityClient.JSONResponseKeys.UniqueKey] as? String
+        self.firstName = dictionary[UdacityClient.JSONResponseKeys.FirstName] as? String
+        self.lastName = dictionary[UdacityClient.JSONResponseKeys.LastName] as? String
+        
     }
     
     init() {

@@ -28,6 +28,8 @@ class TableViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         parentViewController!.navigationItem.leftBarButtonItem?.enabled = true
     }
     

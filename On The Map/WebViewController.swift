@@ -45,10 +45,3 @@ class WebViewController: UIViewController {
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
-
-// MARK: - TMDBAuthViewController: UIWebViewDelegate
-
-extension WebViewController: UIWebViewDelegate {
-    
-
-}

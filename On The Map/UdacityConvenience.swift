@@ -20,7 +20,6 @@ extension UdacityClient {
         
         }
     }
-    
 
     func getSessionIdWith(email: String, password: String, completionHandlerForSession: (success: Bool, errorString: String?) -> Void) {
         
